@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mohammadhassan\'s Android lab</string>
+    <string name="hello_message">سلام دنیا</string>
+    <string name="button_message">من یک دکمه هستم</string>
+</resources>
