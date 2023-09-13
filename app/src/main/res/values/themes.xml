@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.MohammadhassansAndroidLab" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.MohammadhassansAndroidLab" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Customize your light theme here. -->
          <item name="colorPrimary">@color/my_primary</item>
 
@@ -8,6 +8,8 @@
 
          <item name="android:statusBarColor">@color/my_statusbar</item>
 
+
+         <item name="android:textColor">@color/my_text</item>
     </style>
 
     <style name="Theme.MohammadhassansAndroidLab" parent="Base.Theme.MohammadhassansAndroidLab" />
