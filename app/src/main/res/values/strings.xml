@@ -2,4 +2,5 @@
     <string name="app_name">Mohammadhassan\'s Android lab</string>
     <string name="hello_message">hello world!</string>
     <string name="button_message">I\'m a button</string>
+    <string name="sping_message">Spin</string>
 </resources>
