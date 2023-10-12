@@ -3,9 +3,11 @@ package algonquin.cst2335.yega0004;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,9 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         Button loginButton = findViewById(R.id.button);
+        EditText emailEditText = findViewById(R.id.editTextTextEmailAddress);
+
+
         loginButton.setOnClickListener( clk-> {
                 Intent nextPage = new Intent( MainActivity.this, SecondActivity.class);
-                startActivity(nextPage);
+                nextPage.putExtra("Email Address",emailEditText.getText().toString());
+
+        startActivity(nextPage);
         } );
 
 
