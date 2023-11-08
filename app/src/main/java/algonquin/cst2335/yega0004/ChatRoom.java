@@ -2,38 +2,72 @@ package algonquin.cst2335.yega0004;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import algonquin.cst2335.yega0004.Data.ChatRoomViewModel;
 import algonquin.cst2335.yega0004.databinding.ActivityChatRoomBinding;
 import algonquin.cst2335.yega0004.databinding.SentMessageBinding;
 
 public class ChatRoom extends AppCompatActivity {
 
     ActivityChatRoomBinding binding;
-    ArrayList<String> messages = new ArrayList<>();
+    private RecyclerView.Adapter myAdapter;
+    ChatRoomViewModel chatModel ;
+
+//    ArrayList<String> messages = new ArrayList<>();
+
+    private ArrayList<ChatMessage> messages;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_room);
-
 
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.button.setOnClickListener(click -> {
-            messages.add(binding.editText.getText().toString());
+        chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
+        messages = chatModel.messages.getValue();
+        if (messages == null ) {
+        chatModel.messages.postValue(messages = new ArrayList<>());
 
+        }
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        Button button = findViewById(R.id.button);
+        binding.button.setOnClickListener(click -> {
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
+            String currentDateAndTime = sdf.format(new Date());
+            ChatMessage chatMessage = new ChatMessage(binding.editText.getText().toString(), currentDateAndTime, true );
+
+            messages.add(chatMessage);
+            myAdapter.notifyItemInserted(messages.size()-1);
+            binding.editText.setText("");
+        });
+        Button button2 = findViewById(R.id.button2);
+        binding.button2.setOnClickListener(click -> {
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
+            String currentDateAndTime = sdf.format(new Date());
+            ChatMessage chatMessage = new ChatMessage(binding.editText.getText().toString(), currentDateAndTime, false );
+
+            messages.add(chatMessage);
+            myAdapter.notifyItemInserted(messages.size()-1);
             binding.editText.setText("");
         });
 
-        binding.recyclerView.setAdapter(new RecyclerView.Adapter<MyRowHolder>() {
+
+
+        binding.recyclerView.setAdapter(myAdapter = new RecyclerView.Adapter<MyRowHolder>() {
             @NonNull
             @Override
             public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,8 +79,9 @@ public class ChatRoom extends AppCompatActivity {
             public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
                 holder.messageText.setText("");
                 holder.timeText.setText("");
-                String obj = messages.get(position);
-                holder.messageText.setText(obj);
+                ChatMessage obj = messages.get(position);
+                holder.messageText.setText(obj.getMessage());
+                holder.timeText.setText(obj.getTimeSent());
             }
 
             @Override
@@ -54,7 +89,11 @@ public class ChatRoom extends AppCompatActivity {
                 return messages.size();
             }
             public int getItemViewType(int position){
-                return 0;
+                if (messages.get(position).isSentButton()) {
+                    return 0;
+                } else {
+                    return 1;
+                }
             }
 
 
