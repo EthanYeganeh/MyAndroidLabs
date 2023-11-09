@@ -18,6 +18,7 @@ import java.util.Date;
 
 import algonquin.cst2335.yega0004.Data.ChatRoomViewModel;
 import algonquin.cst2335.yega0004.databinding.ActivityChatRoomBinding;
+import algonquin.cst2335.yega0004.databinding.RecieveMessageBinding;
 import algonquin.cst2335.yega0004.databinding.SentMessageBinding;
 
 public class ChatRoom extends AppCompatActivity {
@@ -71,14 +72,26 @@ public class ChatRoom extends AppCompatActivity {
             @NonNull
             @Override
             public MyRowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                SentMessageBinding binding = SentMessageBinding.inflate(getLayoutInflater());
-                return new MyRowHolder(binding.getRoot());
+                if (viewType == 0) {
+                    SentMessageBinding sentMessageBinding = SentMessageBinding.inflate(getLayoutInflater());
+                    sentMessageBinding.getRoot().setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                    return new MyRowHolder(sentMessageBinding.getRoot());
+
+                }else {
+                    RecieveMessageBinding receiveMessageBinding = RecieveMessageBinding.inflate(getLayoutInflater());
+                    receiveMessageBinding.getRoot().setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                    ));
+
+                    return new MyRowHolder(receiveMessageBinding.getRoot());
+                }
             }
 
             @Override
             public void onBindViewHolder(@NonNull MyRowHolder holder, int position) {
-                holder.messageText.setText("");
-                holder.timeText.setText("");
                 ChatMessage obj = messages.get(position);
                 holder.messageText.setText(obj.getMessage());
                 holder.timeText.setText(obj.getTimeSent());
